@@ -30,44 +30,20 @@ def get_question(qid):
 class QuestionsAPI(MethodView):
     DEMO_GROUPS = {
         1: {
-            'age': 1,
             'gender': 1,
-            'edu': 1
+            'age': 1,
         },
         2: {
-            'age': 1,
             'gender': 1,
-            'edu': 2
+            'age': 2,
         },
         3: {
-            'age': 1,
             'gender': 2,
-            'edu': 1
+            'age': 1,
         },
         4: {
-            'age': 1,
             'gender': 2,
-            'edu': 2
-        },
-        5: {
             'age': 2,
-            'gender': 1,
-            'edu': 1
-        },
-        6: {
-            'age': 2,
-            'gender': 2,
-            'edu': 1
-        },
-        7: {
-            'age': 2,
-            'gender': 1,
-            'edu': 2
-        },
-        8: {
-            'age': 2,
-            'gender': 2,
-            'edu': 2
         },
     }
 
