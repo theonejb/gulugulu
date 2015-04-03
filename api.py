@@ -39,7 +39,7 @@ def home():
 
 
 @app.route('/api/question/', methods=['GET', 'POST'])
-def get_question():
+def questions_view():
     try:
         qid = int(flask.request.args['qid'])
         question = get_question(qid)
@@ -111,7 +111,8 @@ def get_question():
         for ur in user_responses:
             user_responses_list.append({
                 'response': ur['main_response'],
-                'comment': ur['comment']
+                'comment': ur['comment'],
+                'name': ur['name']
             })
 
         response_dict['comments'] = user_responses_list
@@ -120,7 +121,7 @@ def get_question():
 
 
 @app.route('/api/comment/', methods=['POST'])
-def post():
+def comments_view():
     qid = flask.request.args['qid']
     question = get_question(qid)
     qid = int(qid)
