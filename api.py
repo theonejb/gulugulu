@@ -51,7 +51,8 @@ def questions_view():
     if flask.request.method == 'GET':
         qdict = {
             'question': question['question'],
-            'sub_questions': question.get('sub_questions', list())
+            'sub_questions': question.get('sub_questions', list()),
+            'allow_comments': question.get('allow_comments', False)
         }
         return flask.jsonify(qdict)
     else:
