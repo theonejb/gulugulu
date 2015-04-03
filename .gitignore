@@ -10,7 +10,6 @@ __pycache__/
 env/
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -55,3 +54,8 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Abdul
+.tmp
+bower_components
+node_modules
