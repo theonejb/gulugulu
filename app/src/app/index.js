@@ -7,6 +7,11 @@ angular.module('gulu', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngRe
         url: '/',
         templateUrl: 'app/main/main.html',
         controller: 'MainCtrl'
+      })
+      .state('form', {
+        url: '/form/',
+        templateUrl: 'app/main/form.html',
+        controller: 'FormCtrl'
       });
 
     $urlRouterProvider.otherwise('/');

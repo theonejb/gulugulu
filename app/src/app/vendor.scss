@@ -1,3 +1,178 @@
 $icon-font-path: "../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 
 @import '../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap';
+
+
+// padding & margin
+$padding-xlg: 35px;
+$padding-lg: 25px;
+$padding-sm: 10px;
+
+$margin-xlg: 35px;
+$margin-lg: 25px;
+$margin-sm: 10px;
+
+// padding & margin
+$padding-xlg: 35px;
+$padding-lg: 25px;
+$padding-sm: 10px;
+
+$margin-xlg: 35px;
+$margin-lg: 25px;
+$margin-sm: 10px;
+
+
+
+// p|padding
+// a|all, t|top, l|left, r|right, b|bottom, v|vertical, h|horizontal
+// s|small, l|large
+.paxl {
+    padding: $padding-xlg;
+}
+.pvxl {
+    padding-top: $padding-xlg;
+    padding-bottom: $padding-xlg;
+}
+.phxl {
+    padding-left: $padding-xlg;
+    padding-right: $padding-xlg;
+}
+.ptxl {
+    padding-top: $padding-xlg;
+}
+.prxl {
+    padding-right: $padding-xlg;
+}
+.pbxl {
+    padding-bottom: $padding-xlg;
+}
+.plxl {
+    padding-left: $padding-xlg;
+}
+
+.pal {
+    padding: $padding-lg;
+}
+.pvl {
+    padding-top: $padding-lg;
+    padding-bottom: $padding-lg;
+}
+.phl {
+    padding-left: $padding-lg;
+    padding-right: $padding-lg;
+}
+.ptl {
+    padding-top: $padding-lg;
+}
+.prl {
+    padding-right: $padding-lg;
+}
+.pbl {
+    padding-bottom: $padding-lg;
+}
+.pll {
+    padding-left: $padding-lg;
+}
+
+.pas {
+    padding: $padding-sm;
+}
+.pvs {
+    padding-top: $padding-sm;
+    padding-bottom: $padding-sm;
+}
+.phs {
+    padding-left: $padding-sm;
+    padding-right: $padding-sm;
+}
+.pts {
+    padding-top: $padding-sm;
+}
+.prs {
+    padding-right: $padding-sm;
+}
+.pbs {
+    padding-bottom: $padding-sm;
+}
+.pls {
+    padding-left: $padding-sm;
+}
+.pan {
+    padding: 0 !important;
+}
+
+
+// m|margin
+// a|all, t|top, l|left, r|right, b|bottom, v|vertical, h|horizontal
+// s|small, l|large
+.maxl {
+    margin: $margin-xlg;
+}
+.mvxl {
+    margin-top: $margin-xlg;
+    margin-bottom: $margin-xlg;
+}
+.mhxl {
+    margin-left: $margin-xlg;
+    margin-right: $margin-xlg;
+}
+.mtxl {
+    margin-top: $margin-xlg;
+}
+.mrxl {
+    margin-right: $margin-xlg;
+}
+.mbxl {
+    margin-bottom: $margin-xlg;
+}
+.mlxl {
+    margin-left: $margin-xlg;
+}
+
+.mal {
+    margin: $margin-lg;
+}
+.mvl {
+    margin-top: $margin-lg;
+    margin-bottom: $margin-lg;
+}
+.mhl {
+    margin-left: $margin-lg;
+    margin-right: $margin-lg;
+}
+.mtl {
+    margin-top: $margin-lg;
+}
+.mrl {
+    margin-right: $margin-lg;
+}
+.mbl {
+    margin-bottom: $margin-lg;
+}
+.mll {
+    margin-left: $margin-lg;
+}
+
+.mas {
+    margin: $margin-sm;
+}
+.mvs {
+    margin-top: $margin-sm;
+    margin-bottom: $margin-sm;
+}
+.mhs {
+    margin-left: $margin-sm;
+    margin-right: $margin-sm;
+}
+.mts {
+    margin-top: $margin-sm;
+}
+.mrs {
+    margin-right: $margin-sm;
+}
+.mbs {
+    margin-bottom: $margin-sm;
+}
+.mls {
+    margin-left: $margin-sm;
+}

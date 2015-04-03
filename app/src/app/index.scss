@@ -14,3 +14,42 @@
 }
 // injector
 // endinjector
+
+
+.q-disagree{
+	background: #4cae4c;
+	color: #fff;
+	font-size: 18px;
+	&.block {
+		display: block;
+		width: 100%;
+	}
+	a {
+		color: #fff;
+		&:hover, &:focus {
+			background: #4cae4c !important;		
+		}
+	}
+	&:hover {
+		background: #4cae4c;
+	}
+}
+
+.q-agree {
+	background: #d9534f;
+	color: #fff;
+	font-size: 18px;
+	&.block {
+		display: block;
+		width: 100%;
+	}
+	a {
+		color: #fff;
+		&:hover, &:focus {
+			background: #d9534f !important;		
+		}		
+	}
+	&:hover {
+		background: #d9534f;
+	}
+}
