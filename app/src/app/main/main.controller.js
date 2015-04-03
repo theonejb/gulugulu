@@ -9,7 +9,8 @@ angular.module('gulu')
       success(function(data, status, headers, config) {
         $scope.question = data.question;
         $scope.sub_questions = data.sub_questions;
-        console.log($scope.sub_questions );
+        $scope.allow_comments = data.allow_comments;
+        console.log(data);
       }).
       error(function(data, status, headers, config) {
       });
@@ -21,24 +22,21 @@ angular.module('gulu')
           allAnswer.push($(this).val());
         });
         allAnswer = allAnswer.join(',');
-        
-        console.log(allAnswer);
-        console.log("cldik");
         $http({
             method: 'POST',
             url: $scope.url,
             data: $.param({response:decision, sub_question_responses: allAnswer }),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).success(function(data, status, headers, config) {
-            // this callback will be called asynchronously
-            // when the response is available
+          }).success(function(data, status, headers, config) {
             $rootScope.qData = data;
-            $state.go('form', {d:decision, q:$scope.question, qid:$scope.param_qid,demoid:$scope.param_demoid});
+            // flag for discussion
+            if ($scope.allow_comments) {
+              $state.go('form', {d:decision, q:$scope.question, qid:$scope.param_qid,demoid:$scope.param_demoid});
+            } else {
+              $state.go('thanks');
+            }
           }).error(function(data, status, headers, config) {
-            // called asynchronously if an error occurs
-            // $state.go('form', {q:$scope.question,id:"12",demoid:"444"});
-            // or server returns response with an error status.
-          });
+        });
         
 
         //console.log('clicked');

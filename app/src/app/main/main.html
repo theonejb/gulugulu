@@ -25,12 +25,19 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row" ng-if="allow_comments">
         <div class="center-block">
           <button class="btn btn-lg btn-danger mal" ng-click="submitForm(0)">ضد</button>
           <button class="btn btn-lg btn-success mal" ng-click="submitForm(1)"> مع </button>
         </div>
       </div>
+
+      <div class="row" ng-if="!allow_comments">
+        <div class="center-block">
+          <button class="btn btn-lg btn-success mal" ng-click="submitForm(1)"> Submit </button>
+        </div>
+      </div>
+
     </form>
   </div>
 
