@@ -1,9 +1,11 @@
 # coding=utf-8
+import datetime
 import uuid
 
 import flask
 from flask.views import MethodView
 
+import pymongo
 
 from app import app
 from app import (
@@ -39,7 +41,7 @@ def home():
 
 
 @app.route('/api/question/', methods=['GET', 'POST'])
-def get_question():
+def questions_view():
     try:
         qid = int(flask.request.args['qid'])
         question = get_question(qid)
@@ -49,7 +51,8 @@ def get_question():
     if flask.request.method == 'GET':
         qdict = {
             'question': question['question'],
-            'sub_questions': question.get('sub_questions', list())
+            'sub_questions': question.get('sub_questions', list()),
+            'allow_comments': question.get('allow_comments', True)
         }
         return flask.jsonify(qdict)
     else:
@@ -67,7 +70,8 @@ def get_question():
             'uid': str(uuid.uuid4()),
             'main_response': main_question_response,
 
-            'user_demographic': user_demographic_info
+            'user_demographic': user_demographic_info,
+            'date': datetime.datetime.now()
         }
 
         if question.get('sub_questions'):
@@ -106,12 +110,14 @@ def get_question():
             'uid': user_response_dict['uid']
         }
 
-        user_responses = responses_col.find({'qid': qid, 'comment': {'$exists': True}})
+        user_responses = responses_col.find({'qid': qid, 'comment': {'$exists': True}}).sort('date',
+                                                                                             pymongo.ASCENDING)
         user_responses_list = list()
         for ur in user_responses:
             user_responses_list.append({
                 'response': ur['main_response'],
-                'comment': ur['comment']
+                'comment': ur['comment'],
+                'name': ur['name']
             })
 
         response_dict['comments'] = user_responses_list
@@ -120,7 +126,7 @@ def get_question():
 
 
 @app.route('/api/comment/', methods=['POST'])
-def post():
+def comments_view():
     qid = flask.request.args['qid']
     question = get_question(qid)
     qid = int(qid)
