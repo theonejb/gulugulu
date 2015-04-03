@@ -79,13 +79,13 @@ class QuestionsAPI(MethodView):
         demoid = int(flask.request.args['demoid'])
         user_demographic_info = self.DEMO_GROUPS[demoid]
 
-        main_question_response = flask.request.form['response']
+        main_question_response = flask.request.args['response']
         try:
             main_question_response = bool(int(main_question_response))
         except (TypeError, ValueError) as e:
             return ('You must answer all questions', 400, {})
 
-        sub_question_responses = flask.request.form['sub_question_responses']
+        sub_question_responses = flask.request.args['sub_question_responses']
         sub_question_responses_list = map(lambda x: bool(int(x)), sub_question_responses.split(','))
         if len(sub_question_responses_list) != len(question['sub_questions']):
             return ('You must answer all questions', 400, {})
