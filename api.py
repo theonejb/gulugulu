@@ -68,7 +68,7 @@ class QuestionsAPI(MethodView):
         question = self.get_question(qid)
         qdict = {
             'question': question['question'],
-            'sub_questions': question['sub_questions']
+            'sub_questions': question.get('sub_questions', list())
         }
         return flask.jsonify(qdict)
 
@@ -86,19 +86,22 @@ class QuestionsAPI(MethodView):
         except (TypeError, ValueError) as e:
             return ('You must answer all questions', 400, {})
 
-        sub_question_responses = flask.request.form['sub_question_responses']
-        sub_question_responses_list = map(lambda x: bool(int(x)), sub_question_responses.split(','))
-        if len(sub_question_responses_list) != len(question['sub_questions']):
-            return ('You must answer all questions', 400, {})
-
         user_response_dict = {
             'qid': qid,
             'uid': str(uuid.uuid4()),
             'main_response': main_question_response,
-            'sub_responses': sub_question_responses_list,
 
             'user_demographic': user_demographic_info
         }
+
+        if question.get('sub_questions'):
+            sub_question_responses = flask.request.form['sub_question_responses']
+            sub_question_responses_list = map(lambda x: bool(int(x)), sub_question_responses.split(','))
+            if len(sub_question_responses_list) != len(question['sub_questions']):
+                return ('You must answer all questions', 400, {})
+
+            user_response_dict['sub_responses'] = sub_question_responses_list
+
         responses_col.insert(user_response_dict)
 
         query_doc = {
@@ -152,6 +155,7 @@ class CommentAPI(MethodView):
         qid = int(flask.request.args['qid'])
 
         uid = flask.request.form['uid']
+        user_name = flask.request.form.get('name', 'Anonymous')
         comment = flask.request.form['comment']
 
         question = self.get_question(qid)
@@ -164,7 +168,8 @@ class CommentAPI(MethodView):
         }
         response_update_dict = {
             '$set': {
-                'comment': comment
+                'comment': comment,
+                'name': user_name
             }
         }
         responses_col.update(response_query_dict, response_update_dict)
