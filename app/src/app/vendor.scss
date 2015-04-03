@@ -176,3 +176,33 @@ $margin-sm: 10px;
 .mls {
     margin-left: $margin-sm;
 }
+
+
+@font-face {
+    font-family: 'ge_sslight';
+    src: url('../assets/fonts/stc-webfont.eot');
+    src: url('../assets/fonts/stc-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../assets/fonts/stc-webfont.woff2') format('woff2'),
+         url('../assets/fonts/stc-webfont.woff') format('woff'),
+         url('../assets/fonts/stc-webfont.ttf') format('truetype'),
+         url('../assets/fonts/stc-webfont.svg#ge_sslight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+.tr {
+	text-align: right;
+	direction: rtl;
+}
+
+.fsm {
+	font-size: 18px;
+}
+.fsl {
+	font-size: 24px;
+}
+.fsxl {
+	font-size: 32px;
+}

@@ -2,9 +2,9 @@
 
   <div ng-include="'components/navbar/navbar.html'"></div>
 
-    <p class="lead paxl">
-      {{question}}
-    </p>
+    <div class="well mbxl tr fsl f-ge">
+        {{question}}
+    </div>
     <div class="col-xs-6">
       <div class="q-disagree">
         <div class="circle-num">
@@ -21,6 +21,21 @@
         <div class="block">Agree</div>
       </div>
 
+    </div>
+
+    <div class="mtxl">&nbsp;</div>
+    <div class="row" ng-repeat="comment in qData.comments">
+      <div class="col-sm-2">
+          Anynomus
+      </div>
+
+      <div class="col-sm-10">
+        <div class="panel panel-default ">
+          <div class="panel-body bg-{{comment.response}}">
+            {{comment.comment}}
+          </div>
+        </div>
+      </div>
     </div>
 
     

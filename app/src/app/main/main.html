@@ -1,20 +1,26 @@
 <div class="container">
 
-  <div ng-include1="'components/navbar/navbar.html'"></div>
+  <div ng-include="'components/navbar/navbar.html'"></div>
 
     <form role="form" name="form" novalidate>
-      <h2 class="paxl">
+      <div class="well mbxl tr fsl f-ge">
         {{question}}
-      </h2>
-      <div class="form-group" ng-repeat="(key, value) in sub_questions" style="text-left">
-        <label for="exampleInputEmail1">{{value}} </label>
-        <label class="radio-inline">
-          <input type="radio" name="sub_{{key}}" id="inlineRadio1" value="1" checked="true"> Yes
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="sub_{{key}}" id="inlineRadio2" value="0"> No
-        </label>
       </div>
+      <div class="row tr f-ge" ng-repeat="(key, value) in sub_questions">
+        <label for="married_" class="control-label question">{{value}} </label>
+        <div class="col-sm-12">
+            <div class="checkbox answers">
+                <label>
+                    <input type="radio" class="circle-check" name="sub_{{key}}" ng-model="formData.married_" value="1" required>  Yes
+                </label>
+                <label>
+                    <input type="radio" class="circle-check" name="sub_{{key}}" ng-model="formData.married_" value="0" required>  No
+                </label>
+            </div>
+        </div>
+      </div>
+
+
       <div class="row">
         <button class="btn btn-lg btn-danger mal" ng-click="submitForm(0)">Disagree</button>
         <button class="btn btn-lg btn-success mal" ng-click="submitForm(1)"> Agree </button>
