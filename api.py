@@ -1,4 +1,6 @@
 # coding=utf-8
+import uuid
+
 import flask
 from flask.views import MethodView
 
@@ -6,7 +8,8 @@ from flask.views import MethodView
 from app import app
 from app import (
     questions_col,
-    answers_col
+    answers_col,
+    responses_col
 )
 
 
@@ -71,21 +74,38 @@ class QuestionsAPI(MethodView):
 
     def post(self):
         qid = flask.request.args['qid']
-        demoid = int(flask.request.args['demoid'])
-
-        user_response = flask.request.args['response']
-        try:
-            user_response = bool(int(user_response))
-        except (TypeError, ValueError) as e:
-            flask.abort(400)
-
         question = self.get_question(qid)
+
+        demoid = int(flask.request.args['demoid'])
+        user_demographic_info = self.DEMO_GROUPS[demoid]
+
+        main_question_response = flask.request.form['response']
+        try:
+            main_question_response = bool(int(main_question_response))
+        except (TypeError, ValueError) as e:
+            return ('You must answer all questions', 400, {})
+
+        sub_question_responses = flask.request.form['sub_question_responses']
+        sub_question_responses_list = map(lambda x: bool(int(x)), sub_question_responses.split(','))
+        if len(sub_question_responses_list) != len(question['sub_questions']):
+            return ('You must answer all questions', 400, {})
+
+        user_response_dict = {
+            'qid': qid,
+            'uid': str(uuid.uuid4()),
+            'main_response': main_question_response,
+            'sub_responses': sub_question_responses_list,
+
+            'user_demographic': user_demographic_info
+        }
+        responses_col.insert(user_response_dict)
+
         query_doc = {
             'qid': qid
         }
-        query_doc.update(self.DEMO_GROUPS[demoid])
+        query_doc.update(user_demographic_info)
 
-        if user_response:
+        if main_question_response:
             field_name = 'num_agrees'
         else:
             field_name = 'num_disagrees'
@@ -100,8 +120,10 @@ class QuestionsAPI(MethodView):
         updated_answer = answers_col.find_one(query_doc)
         response_dict = {
             'qid': qid,
-            'num_agrees': updated_answer['num_agrees'],
-            'num_disagrees': updated_answer['num_disagrees']
+            'num_agrees': updated_answer.get('num_agrees', 0),
+            'num_disagrees': updated_answer.get('num_disagrees', 0),
+
+            'uid': user_response_dict['uid']
         }
 
         return flask.jsonify(response_dict)
