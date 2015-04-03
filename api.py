@@ -63,7 +63,7 @@ class QuestionsAPI(MethodView):
     }
 
     def get(self):
-        qid = flask.request.args['qid']
+        qid = int(flask.request.args['qid'])
 
         question = self.get_question(qid)
         qdict = {
@@ -73,7 +73,8 @@ class QuestionsAPI(MethodView):
         return flask.jsonify(qdict)
 
     def post(self):
-        qid = flask.request.args['qid']
+        qid = int(flask.request.args['qid'])
+
         question = self.get_question(qid)
 
         demoid = int(flask.request.args['demoid'])
@@ -126,13 +127,53 @@ class QuestionsAPI(MethodView):
             'uid': user_response_dict['uid']
         }
 
+        user_responses = responses_col.find({'qid': qid, 'comment': {'$exists': True}})
+        user_responses_list = list()
+        for ur in user_responses:
+            user_responses_list.append({
+                'response': ur['main_response'],
+                'comment': ur['comment']
+            })
+
+        response_dict['comments'] = user_responses_list
+
         return flask.jsonify(response_dict)
 
     def get_question(self, qid):
-        qid = int(qid)
-
         return questions_col.find_one({'qid': qid}) or flask.abort(404)
 
 
 questions_view = QuestionsAPI.as_view('questions_api')
 app.add_url_rule('/api/question/', view_func=questions_view, methods=['GET', 'POST'])
+
+
+class CommentAPI(MethodView):
+    def post(self):
+        qid = int(flask.request.args['qid'])
+
+        uid = flask.request.form['uid']
+        comment = flask.request.form['comment']
+
+        question = self.get_question(qid)
+        response_query_dict = {
+            'qid': qid,
+            'uid': uid,
+            'comment': {
+                '$exists': False
+            }
+        }
+        response_update_dict = {
+            '$set': {
+                'comment': comment
+            }
+        }
+        responses_col.update(response_query_dict, response_update_dict)
+
+        return ''
+
+    def get_question(self, qid):
+        return questions_col.find_one({'qid': qid}) or flask.abort(404)
+
+
+comments_view = CommentAPI.as_view('comments_api')
+app.add_url_rule('/api/comment/', view_func=comments_view, methods=['POST'])
