@@ -25,9 +25,6 @@
 
     <div class="mtxl">&nbsp;</div>
     <div class="row" ng-repeat="comment in qData.comments">
-      <div class="col-sm-2">
-          Anynomus
-      </div>
 
       <div class="col-sm-10">
         <div class="panel panel-default ">
@@ -35,6 +32,38 @@
             {{comment.comment}}
           </div>
         </div>
+      </div>
+      <div class="col-sm-2">
+          Anynomus
+      </div>
+    </div>
+
+    <div class="row" ng-if="submitted">
+
+
+      <div class="col-sm-10">
+        <div class="panel panel-default ">
+          <div class="panel-body bg-{{commentdecisionNew}}">
+            {{commentBodyNew}}
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-2">
+          {{commentUserNew}}
+      </div>
+    </div>
+
+    <div class="row"  ng-show="!submitted">
+      <div class="col-sm-10">
+        <div class="panel panel-default ">
+          <div class="">
+            <textarea class="form-control" ng-model="commentBody"></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary" ng-click="submitComment(qData.uid)">Submit</button>
+      </div>
+      <div class="col-sm-2">
+          <input type="text" placeholder="your name" class="form-control" ng-model="commentUser">
       </div>
     </div>
 

@@ -70,11 +70,11 @@
 }
 
 
-.bg-true {
+.bg-true, .bg-1 {
 	background-color: #dff0d8;
 }
 
-.bg-false {
+.bg-false, .bg-0 {
 	background-color: #f2dede;
 }
 
@@ -161,4 +161,8 @@
 .btn {
 	box-shadow: 0px 0px 2px #000;
 	min-width: 100px;
+}
+
+.form-control {
+	text-align: right;
 }

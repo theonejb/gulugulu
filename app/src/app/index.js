@@ -12,6 +12,10 @@ angular.module('gulu', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngRe
         url: '/form/:d/:q/:qid/:demoid/',
         templateUrl: 'app/main/form.html',
         controller: 'FormCtrl'
+      }).state('thanks', {
+        url: '/thanks/',
+        templateUrl: 'app/main/thanks.html',
+        controller: 'FormCtrl'
       });
 
     $urlRouterProvider.otherwise('/');
