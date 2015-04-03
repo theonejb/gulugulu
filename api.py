@@ -39,7 +39,7 @@ def home():
 
 
 @app.route('/api/question/', methods=['GET', 'POST'])
-def get_question(self):
+def get_question():
     try:
         qid = int(flask.request.args['qid'])
         question = get_question(qid)
@@ -120,7 +120,7 @@ def get_question(self):
 
 
 @app.route('/api/comment/', methods=['POST'])
-def post(self):
+def post():
     qid = flask.request.args['qid']
     question = get_question(qid)
     qid = int(qid)
