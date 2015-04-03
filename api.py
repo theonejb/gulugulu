@@ -18,6 +18,15 @@ def home():
     return "Hello Takalam!"
 
 
+def get_question(qid):
+    try:
+        qid = int(qid)
+    except (TypeError, ValueError):
+        flask.abort(404)
+
+    return questions_col.find_one({'qid': qid}) or flask.abort(404)
+
+
 class QuestionsAPI(MethodView):
     DEMO_GROUPS = {
         1: {
@@ -63,9 +72,9 @@ class QuestionsAPI(MethodView):
     }
 
     def get(self):
-        qid = int(flask.request.args['qid'])
+        qid = flask.request.args['qid']
+        question = get_question(qid)
 
-        question = self.get_question(qid)
         qdict = {
             'question': question['question'],
             'sub_questions': question.get('sub_questions', list())
@@ -73,9 +82,9 @@ class QuestionsAPI(MethodView):
         return flask.jsonify(qdict)
 
     def post(self):
-        qid = int(flask.request.args['qid'])
-
-        question = self.get_question(qid)
+        qid = flask.request.args['qid']
+        question = get_question(qid)
+        qid = int(qid)
 
         demoid = int(flask.request.args['demoid'])
         user_demographic_info = self.DEMO_GROUPS[demoid]
@@ -142,9 +151,6 @@ class QuestionsAPI(MethodView):
 
         return flask.jsonify(response_dict)
 
-    def get_question(self, qid):
-        return questions_col.find_one({'qid': qid}) or flask.abort(404)
-
 
 questions_view = QuestionsAPI.as_view('questions_api')
 app.add_url_rule('/api/question/', view_func=questions_view, methods=['GET', 'POST'])
@@ -152,13 +158,13 @@ app.add_url_rule('/api/question/', view_func=questions_view, methods=['GET', 'PO
 
 class CommentAPI(MethodView):
     def post(self):
-        qid = int(flask.request.args['qid'])
+        qid = flask.request.args['qid']
 
         uid = flask.request.form['uid']
         user_name = flask.request.form.get('name', 'Anonymous')
         comment = flask.request.form['comment']
 
-        question = self.get_question(qid)
+        question = get_question(qid)
         response_query_dict = {
             'qid': qid,
             'uid': uid,
@@ -175,9 +181,6 @@ class CommentAPI(MethodView):
         responses_col.update(response_query_dict, response_update_dict)
 
         return ''
-
-    def get_question(self, qid):
-        return questions_col.find_one({'qid': qid}) or flask.abort(404)
 
 
 comments_view = CommentAPI.as_view('comments_api')
