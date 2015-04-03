@@ -4,21 +4,24 @@
 
     <div class="q-bg" style="background: url(../assets/images/q{{param_qid}}.jpg) top center no-repeat;">
     </div>
-    <div class="well mbxl tr fsl f-ge main-qestion">
-      {{question}}
-    </div>
-    <form role="form" name="form" novalidate>
-      <div class="row tr f-ge" ng-repeat="(key, value) in sub_questions">
-        <label for="married_" class="control-label question">{{value}} </label>
-        <div class="col-sm-12">
-            <div class="checkbox answers">
-                <label>
-                    <input type="radio" class="circle-check" name="sub_{{key}}" ng-model="formData.married_" value="1" required>  نعم
-                </label>
-                <label>
-                    <input type="radio" class="circle-check" name="sub_{{key}}" ng-model="formData.married_" value="0" required>  لا
-                </label>
-            </div>
+    <div class="well mbxl qestion-box">
+      <div class="tr fsl f-ge main-qestion">
+        {{question}}
+      </div>
+    
+      <form role="form" name="form" novalidate>
+        <div class="row tr f-ge" ng-repeat="(key, value) in sub_questions">
+          <label class="control-label question">{{value}} </label>
+          <div class="col-sm-12">
+              <div class="checkbox answers">
+                  <label>
+                      <input type="radio" class="circle-check" name="sub_{{key}}" ng-model="formData.married_" value="1" required>  نعم
+                  </label>
+                  <label>
+                      <input type="radio" class="circle-check" name="sub_{{key}}" ng-model="formData.married_" value="0" required>  لا
+                  </label>
+              </div>
+          </div>
         </div>
       </div>
 
