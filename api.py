@@ -13,57 +13,48 @@ from app import (
 )
 
 
+DEMO_GROUPS = {
+    1: {
+        'gender': 1,
+        'age': 1,
+    },
+    2: {
+        'gender': 1,
+        'age': 2,
+    },
+    3: {
+        'gender': 2,
+        'age': 1,
+    },
+    4: {
+        'gender': 2,
+        'age': 2,
+    },
+}
+
+
 @app.route('/')
 def home():
     return "Hello Takalam!"
 
 
-def get_question(qid):
+@app.route('/api/question/', methods=['GET', 'POST'])
+def get_question(self):
     try:
-        qid = int(qid)
-    except (TypeError, ValueError):
-        flask.abort(404)
-
-    return questions_col.find_one({'qid': qid}) or flask.abort(404)
-
-
-class QuestionsAPI(MethodView):
-    DEMO_GROUPS = {
-        1: {
-            'gender': 1,
-            'age': 1,
-        },
-        2: {
-            'gender': 1,
-            'age': 2,
-        },
-        3: {
-            'gender': 2,
-            'age': 1,
-        },
-        4: {
-            'gender': 2,
-            'age': 2,
-        },
-    }
-
-    def get(self):
-        qid = flask.request.args['qid']
+        qid = int(flask.request.args['qid'])
         question = get_question(qid)
+    except (TypeError, ValueError) as e:
+        return flask.abort(400)
 
+    if flask.request.method == 'GET':
         qdict = {
             'question': question['question'],
             'sub_questions': question.get('sub_questions', list())
         }
         return flask.jsonify(qdict)
-
-    def post(self):
-        qid = flask.request.args['qid']
-        question = get_question(qid)
-        qid = int(qid)
-
+    else:
         demoid = int(flask.request.args['demoid'])
-        user_demographic_info = self.DEMO_GROUPS[demoid]
+        user_demographic_info = DEMO_GROUPS[demoid]
 
         main_question_response = flask.request.form['response']
         try:
@@ -128,37 +119,39 @@ class QuestionsAPI(MethodView):
         return flask.jsonify(response_dict)
 
 
-questions_view = QuestionsAPI.as_view('questions_api')
-app.add_url_rule('/api/question/', view_func=questions_view, methods=['GET', 'POST'])
+@app.route('/api/comment/', methods=['POST'])
+def post(self):
+    qid = flask.request.args['qid']
+    question = get_question(qid)
+    qid = int(qid)
+
+    uid = flask.request.form['uid']
+    user_name = flask.request.form.get('name', 'Anonymous')
+    comment = flask.request.form['comment']
+
+    response_query_dict = {
+        'qid': qid,
+        'uid': uid,
+        'comment': {
+            '$exists': False
+        }
+    }
+    response_update_dict = {
+        '$set': {
+            'comment': comment,
+            'name': user_name
+        }
+    }
+    responses_col.update(response_query_dict, response_update_dict)
+
+    return ''
 
 
-class CommentAPI(MethodView):
-    def post(self):
-        qid = flask.request.args['qid']
-        question = get_question(qid)
+def get_question(qid):
+    try:
         qid = int(qid)
+    except (TypeError, ValueError):
+        flask.abort(404)
 
-        uid = flask.request.form['uid']
-        user_name = flask.request.form.get('name', 'Anonymous')
-        comment = flask.request.form['comment']
+    return questions_col.find_one({'qid': qid}) or flask.abort(404)
 
-        response_query_dict = {
-            'qid': qid,
-            'uid': uid,
-            'comment': {
-                '$exists': False
-            }
-        }
-        response_update_dict = {
-            '$set': {
-                'comment': comment,
-                'name': user_name
-            }
-        }
-        responses_col.update(response_query_dict, response_update_dict)
-
-        return ''
-
-
-comments_view = CommentAPI.as_view('comments_api')
-app.add_url_rule('/api/comment/', view_func=comments_view, methods=['POST'])
