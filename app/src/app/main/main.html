@@ -2,15 +2,24 @@
 
   <div ng-include1="'components/navbar/navbar.html'"></div>
 
-  <div class="jumbotron text-center mtxl">
-  <img src="/assets/images/takalam-logo.png"/ width="30%">
-    <p class="lead paxl">
-      {{question}}
-    </p>
-    <div class="row">
-      <button class="btn btn-lg btn-success mal" ui-sref="form">Agree</button>
-      <button class="btn btn-lg btn-danger mal" ui-sref="disagree">Disagree</button>
-    </div>
+    <form role="form" name="form" novalidate>
+      <h2 class="paxl">
+        {{question}}
+      </h2>
+      <div class="form-group" ng-repeat="(key, value) in sub_questions" style="text-left">
+        <label for="exampleInputEmail1">{{value}} </label>
+        <label class="radio-inline">
+          <input type="radio" name="sub_{{key}}" id="inlineRadio1" value="1" checked="true"> Yes
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="sub_{{key}}" id="inlineRadio2" value="0"> No
+        </label>
+      </div>
+      <div class="row">
+        <button class="btn btn-lg btn-danger mal" ng-click="submitForm(0)">Disagree</button>
+        <button class="btn btn-lg btn-success mal" ng-click="submitForm(1)"> Agree </button>
+      </div>
+    </form>
   </div>
 
   <div class="footer">

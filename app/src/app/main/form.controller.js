@@ -1,6 +1,9 @@
 'use strict';
 
 angular.module('gulu')
-  .controller('FormCtrl', function ($scope, $http, $rootScope) {
-      // $scope.question = "Do you think life is fair in  providing equal opprtunities?";
+  .controller('FormCtrl', function ($scope, $http, $rootScope, $stateParams) {
+    $scope.param = $stateParams.qid + $stateParams.demoid;
+    $scope.question = $stateParams.q;
+    $scope.qData = $rootScope.qData;
+    console.log($scope.qData);
   });

@@ -2,25 +2,29 @@
 
   <div ng-include="'components/navbar/navbar.html'"></div>
 
-  <div class="jumbotron text-center mtxl">
     <p class="lead paxl">
       {{question}}
     </p>
-    <div class="col-md-6">
-      <ul class="nav nav-pills" role="tablist">
-        <li role="presentation" class="q-agree block"><a href="#">Agree <span class="badge">42</span></a></li>
-      </ul>
+    <div class="col-xs-6">
+      <div class="q-disagree">
+        <div class="circle-num">
+          {{qData.num_disagrees}}
+        </div>
+        <div class="block">Disagree</div>
+      </div>
     </div>
-    <div class="col-md-6">
-      <ul class="nav nav-pills" role="tablist">
-        <li role="presentation" class="q-disagree block"><a href="#">Disagree <span class="badge">42</span></a></li>
-      </ul>
+    <div class="col-xs-6">
+      <div class="q-agree">
+        <div class="circle-num">
+          {{qData.num_agrees}}
+        </div>
+        <div class="block">Agree</div>
+      </div>
+
     </div>
 
-    <div class="col-md-1">
-      Ahmed
-    </div>
-  </div>
+    
+
 
   <div class="footer">
     <p></p>
