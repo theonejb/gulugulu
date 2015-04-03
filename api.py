@@ -1,4 +1,5 @@
 # coding=utf-8
+import datetime
 import uuid
 
 import flask
@@ -67,7 +68,8 @@ def questions_view():
             'uid': str(uuid.uuid4()),
             'main_response': main_question_response,
 
-            'user_demographic': user_demographic_info
+            'user_demographic': user_demographic_info,
+            'date': datetime.datetime.now()
         }
 
         if question.get('sub_questions'):
@@ -106,7 +108,8 @@ def questions_view():
             'uid': user_response_dict['uid']
         }
 
-        user_responses = responses_col.find({'qid': qid, 'comment': {'$exists': True}})
+        user_responses = responses_col.find({'qid': qid, 'comment': {'$exists': True}}).sort('date',
+                                                                                             pymongo.DESCENDING)
         user_responses_list = list()
         for ur in user_responses:
             user_responses_list.append({
