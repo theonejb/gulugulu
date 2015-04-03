@@ -110,7 +110,7 @@ def questions_view():
         }
 
         user_responses = responses_col.find({'qid': qid, 'comment': {'$exists': True}}).sort('date',
-                                                                                             pymongo.DESCENDING)
+                                                                                             pymongo.ASCENDING)
         user_responses_list = list()
         for ur in user_responses:
             user_responses_list.append({
