@@ -135,12 +135,13 @@ app.add_url_rule('/api/question/', view_func=questions_view, methods=['GET', 'PO
 class CommentAPI(MethodView):
     def post(self):
         qid = flask.request.args['qid']
+        question = get_question(qid)
+        qid = int(qid)
 
         uid = flask.request.form['uid']
         user_name = flask.request.form.get('name', 'Anonymous')
         comment = flask.request.form['comment']
 
-        question = get_question(qid)
         response_query_dict = {
             'qid': qid,
             'uid': uid,
