@@ -1,16 +1,31 @@
 <div class="container">
 
-  <div ng-include1="'components/navbar/navbar.html'"></div>
+  <div ng-include="'components/navbar/navbar.html'"></div>
 
-  <div class="jumbotron text-center mtxl">
-  <img src="/assets/images/takalam-logo.png"/ width="30%">
-    <p class="lead paxl">
-      {{question}}
-    </p>
-    <div class="row">
-      <button class="btn btn-lg btn-success mal" ui-sref="form">Agree</button>
-      <button class="btn btn-lg btn-danger mal" ui-sref="disagree">Disagree</button>
-    </div>
+    <form role="form" name="form" novalidate>
+      <div class="well mbxl tr fsl f-ge">
+        {{question}}
+      </div>
+      <div class="row tr f-ge" ng-repeat="(key, value) in sub_questions">
+        <label for="married_" class="control-label question">{{value}} </label>
+        <div class="col-sm-12">
+            <div class="checkbox answers">
+                <label>
+                    <input type="radio" class="circle-check" name="sub_{{key}}" ng-model="formData.married_" value="1" required>  Yes
+                </label>
+                <label>
+                    <input type="radio" class="circle-check" name="sub_{{key}}" ng-model="formData.married_" value="0" required>  No
+                </label>
+            </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <button class="btn btn-lg btn-danger mal" ng-click="submitForm(0)">Disagree</button>
+        <button class="btn btn-lg btn-success mal" ng-click="submitForm(1)"> Agree </button>
+      </div>
+    </form>
   </div>
 
   <div class="footer">

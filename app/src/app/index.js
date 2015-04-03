@@ -9,7 +9,7 @@ angular.module('gulu', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngRe
         controller: 'MainCtrl'
       })
       .state('form', {
-        url: '/form/',
+        url: '/form/:d/:q/:qid/:demoid/',
         templateUrl: 'app/main/form.html',
         controller: 'FormCtrl'
       });
