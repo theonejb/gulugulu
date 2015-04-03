@@ -5,6 +5,7 @@ import uuid
 import flask
 from flask.views import MethodView
 
+import pymongo
 
 from app import app
 from app import (
