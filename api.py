@@ -64,13 +64,14 @@ class QuestionsAPI(MethodView):
 
         question = self.get_question(qid)
         qdict = {
-            'question': question['question']
+            'question': question['question'],
+            'sub_questions': question['sub_questions']
         }
         return flask.jsonify(qdict)
 
     def post(self):
         qid = flask.request.args['qid']
-        demoid = flask.request.args['demoid']
+        demoid = int(flask.request.args['demoid'])
 
         user_response = flask.request.args['response']
         try:
@@ -82,6 +83,7 @@ class QuestionsAPI(MethodView):
         query_doc = {
             'qid': qid
         }
+        query_doc.update(self.DEMO_GROUPS[demoid])
 
         if user_response:
             field_name = 'num_agrees'
@@ -95,7 +97,14 @@ class QuestionsAPI(MethodView):
 
         answers_col.update(query_doc, update_doc, upsert=True)
 
-        return ''
+        updated_answer = answers_col.find_one(query_doc)
+        response_dict = {
+            'qid': qid,
+            'num_agrees': updated_answer['num_agrees'],
+            'num_disagrees': updated_answer['num_disagrees']
+        }
+
+        return flask.jsonify(response_dict)
 
     def get_question(self, qid):
         qid = int(qid)
