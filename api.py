@@ -135,4 +135,5 @@ class QuestionsAPI(MethodView):
 
 
 questions_view = QuestionsAPI.as_view('questions_api')
-app.add_url_rule('/api/question/', view_func=questions_view, methods=['GET', 'POST'])
+app.add_url_rule('/api/question/', view_func=questions_view, methods=['GET'])
+app.add_url_rule('/api/question/response/', view_func=questions_view, methods=['POST'])
