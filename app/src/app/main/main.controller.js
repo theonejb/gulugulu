@@ -16,11 +16,11 @@ angular.module('gulu')
       error(function(data, status, headers, config) {
       });
 
-
       $scope.submitForm =  function (decision) {  
         var allAnswer = [];
+
         $('input[type="radio"]:checked').each(function() {
-          allAnswer.push($(this).val());
+          allAnswer.push($(this).val()); 
         });
         allAnswer = allAnswer.join(',');
         $http({
