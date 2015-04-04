@@ -135,7 +135,7 @@ def get_comments():
         responses = responses_col.find({
             'qid': qid,
             'comment': {'$exists': True}
-        })
+        }).sort('date', pymongo.ASCENDING)
 
         return_list = list()
         for r in responses:
