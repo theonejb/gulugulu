@@ -125,62 +125,61 @@ def questions_view():
         return flask.jsonify(response_dict)
 
 
-@app.route('/api/comment/', methods=['GET'])
+@app.route('/api/comment/')
 def get_comments():
-    qid = flask.request.args['qid']
-    question = get_question(qid)
-    qid = int(qid)
+    if flask.request.method == 'GET':
+        qid = flask.request.args['qid']
+        question = get_question(qid)
+        qid = int(qid)
 
-    responses = responses_col.find({
-        'qid': qid,
-        'comment': {'$exists': True}
-    })
-
-    return_list = list()
-    for r in responses:
-        return_list.append({
-            'comment': r['comment'],
-            'response': r['main_response']
+        responses = responses_col.find({
+            'qid': qid,
+            'comment': {'$exists': True}
         })
 
-    answers_info = answers_col.find_one({'qid': qid})
-    if answers_info is None:
-        answers_info = dict()
+        return_list = list()
+        for r in responses:
+            return_list.append({
+                'comment': r['comment'],
+                'response': r['main_response']
+            })
 
-    response_dict = {
-        'qid': qid,
-        'num_agrees': answers_info.get('num_agrees', 0),
-        'num_disagrees': answers_info.get('num_disagrees', 0),
-        'comments': return_list
-    }
-    return flask.jsonify(response_dict)
+        answers_info = answers_col.find_one({'qid': qid})
+        if answers_info is None:
+            answers_info = dict()
 
-@app.route('/api/comment/', methods=['POST'])
-def comments_view():
-    qid = flask.request.args['qid']
-    question = get_question(qid)
-    qid = int(qid)
-
-    uid = flask.request.form['uid']
-    user_name = flask.request.form.get('name', 'Anonymous')
-    comment = flask.request.form['comment']
-
-    response_query_dict = {
-        'qid': qid,
-        'uid': uid,
-        'comment': {
-            '$exists': False
+        response_dict = {
+            'qid': qid,
+            'num_agrees': answers_info.get('num_agrees', 0),
+            'num_disagrees': answers_info.get('num_disagrees', 0),
+            'comments': return_list
         }
-    }
-    response_update_dict = {
-        '$set': {
-            'comment': comment,
-            'name': user_name
-        }
-    }
-    responses_col.update(response_query_dict, response_update_dict)
+        return flask.jsonify(response_dict)
+    else:
+        qid = flask.request.args['qid']
+        question = get_question(qid)
+        qid = int(qid)
 
-    return ''
+        uid = flask.request.form['uid']
+        user_name = flask.request.form.get('name', 'Anonymous')
+        comment = flask.request.form['comment']
+
+        response_query_dict = {
+            'qid': qid,
+            'uid': uid,
+            'comment': {
+                '$exists': False
+            }
+        }
+        response_update_dict = {
+            '$set': {
+                'comment': comment,
+                'name': user_name
+            }
+        }
+        responses_col.update(response_query_dict, response_update_dict)
+
+        return ''
 
 
 def get_question(qid):
