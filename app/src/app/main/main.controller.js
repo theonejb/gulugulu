@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('gulu')
-  .controller('MainCtrl', function ($scope, $http, $rootScope, $state, $stateParams, $location) {
+  .controller('MainCtrl', function ($scope, $http, $rootScope, $state, $stateParams, $location, $cookieStore) {
     $scope.param_qid= $location.search()['qid'];
     $scope.param_demoid= $location.search()['demoid'];
     $scope.url= "http://takalam.me/api/question/?qid="+$scope.param_qid+"&demoid="+$scope.param_demoid;
@@ -10,7 +10,8 @@ angular.module('gulu')
         $scope.question = data.question;
         $scope.sub_questions = data.sub_questions;
         $scope.allow_comments = data.allow_comments;
-        console.log(data);
+        $cookieStore.put('qIdCookie', $scope.param_qid)
+        console.log($scope.param_qid);
       }).
       error(function(data, status, headers, config) {
       });
@@ -29,6 +30,7 @@ angular.module('gulu')
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
           }).success(function(data, status, headers, config) {
             $rootScope.qData = data;
+            $cookieStore.put('uidCookie', $rootScope.qData.uid)
             // flag for discussion
             if ($scope.allow_comments) {
               $state.go('form', {d:decision, q:$scope.question, qid:$scope.param_qid,demoid:$scope.param_demoid});
