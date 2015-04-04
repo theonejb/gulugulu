@@ -125,7 +125,7 @@ def questions_view():
         return flask.jsonify(response_dict)
 
 
-@app.route('/api/comment/')
+@app.route('/api/comment/', methods=['GET', 'POST'])
 def get_comments():
     if flask.request.method == 'GET':
         qid = flask.request.args['qid']
