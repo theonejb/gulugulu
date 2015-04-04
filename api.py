@@ -125,32 +125,62 @@ def questions_view():
         return flask.jsonify(response_dict)
 
 
-@app.route('/api/comment/', methods=['POST'])
-def comments_view():
-    qid = flask.request.args['qid']
-    question = get_question(qid)
-    qid = int(qid)
+@app.route('/api/comment/', methods=['GET', 'POST'])
+def get_comments():
+    if flask.request.method == 'GET':
+        qid = flask.request.args['qid']
+        question = get_question(qid)
+        qid = int(qid)
 
-    uid = flask.request.form['uid']
-    user_name = flask.request.form.get('name', 'Anonymous')
-    comment = flask.request.form['comment']
+        responses = responses_col.find({
+            'qid': qid,
+            'comment': {'$exists': True}
+        }).sort('date', pymongo.ASCENDING)
 
-    response_query_dict = {
-        'qid': qid,
-        'uid': uid,
-        'comment': {
-            '$exists': False
+        return_list = list()
+        for r in responses:
+            return_list.append({
+                'comment': r['comment'],
+                'name': r['name'],
+                'response': r['main_response']
+            })
+
+        answers_info = answers_col.find_one({'qid': qid})
+        if answers_info is None:
+            answers_info = dict()
+
+        response_dict = {
+            'qid': qid,
+            'num_agrees': answers_info.get('num_agrees', 0),
+            'num_disagrees': answers_info.get('num_disagrees', 0),
+            'comments': return_list
         }
-    }
-    response_update_dict = {
-        '$set': {
-            'comment': comment,
-            'name': user_name
-        }
-    }
-    responses_col.update(response_query_dict, response_update_dict)
+        return flask.jsonify(response_dict)
+    else:
+        qid = flask.request.args['qid']
+        question = get_question(qid)
+        qid = int(qid)
 
-    return ''
+        uid = flask.request.form['uid']
+        user_name = flask.request.form.get('name', 'Anonymous')
+        comment = flask.request.form['comment']
+
+        response_query_dict = {
+            'qid': qid,
+            'uid': uid,
+            'comment': {
+                '$exists': False
+            }
+        }
+        response_update_dict = {
+            '$set': {
+                'comment': comment,
+                'name': user_name
+            }
+        }
+        responses_col.update(response_query_dict, response_update_dict)
+
+        return ''
 
 
 def get_question(qid):
