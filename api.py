@@ -143,7 +143,17 @@ def get_comments():
             'response': r['main_response']
         })
 
-    return flask.jsonify({'comments': return_list})
+    answers_info = answers_col.find_one({'qid': qid})
+    if answers_info is None:
+        answers_info = dict()
+
+    response_dict = {
+        'qid': qid,
+        'num_agrees': answers_info.get('num_agrees', 0),
+        'num_disagrees': answers_info.get('num_disagrees', 0),
+        'comments': return_list
+    }
+    return flask.jsonify(response_dict)
 
 @app.route('/api/comment/', methods=['POST'])
 def comments_view():
