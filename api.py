@@ -141,6 +141,7 @@ def get_comments():
         for r in responses:
             return_list.append({
                 'comment': r['comment'],
+                'name': r['name'],
                 'response': r['main_response']
             })
 
