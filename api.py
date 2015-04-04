@@ -125,6 +125,26 @@ def questions_view():
         return flask.jsonify(response_dict)
 
 
+@app.route('/api/comment/', methods=['GET'])
+def get_comments():
+    qid = flask.request.args['qid']
+    question = get_question(qid)
+    qid = int(qid)
+
+    responses = responses_col.find({
+        'qid': qid,
+        'comment': {'$exists': True}
+    })
+
+    return_list = list()
+    for r in responses:
+        return_list.append({
+            'comment': r['comment'],
+            'response': r['main_response']
+        })
+
+    return flask.jsonify({'comments': return_list})
+
 @app.route('/api/comment/', methods=['POST'])
 def comments_view():
     qid = flask.request.args['qid']
