@@ -18,6 +18,6 @@ angular.module('gulu', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngRe
         controller: 'FormCtrl'
       });
 
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/?qid=1&demoid=1');
   })
 ;
